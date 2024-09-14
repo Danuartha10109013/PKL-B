@@ -10,7 +10,7 @@ class CheckAdmin
     {
         // Periksa apakah pengguna adalah admin (role = 0)
         if (Auth::check()) {
-            if (Auth::user()->role == 1){
+            if (Auth::user()->role == 0){
                 return $next($request);
             }
             return response()->view('errors.custom', ['message' => 'Anda Bukan Admin'], 403);

@@ -11,7 +11,7 @@ class CheckPegawai
     {
         // Periksa apakah pengguna adalah pegawai (role = 1)
         if (Auth::check()) {
-            if (Auth::user()->role == 2){
+            if (Auth::user()->role == 1){
                 return $next($request);
             }
             return response()->view('errors.custom', ['message' => 'Anda Bukan Admin'], 403);

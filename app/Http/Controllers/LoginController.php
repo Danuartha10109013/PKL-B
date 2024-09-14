@@ -15,24 +15,31 @@ class LoginController extends Controller
     public function login_proses(Request $request)
     {
         // dd($request->all());
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
+        $loginType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         $data = [
-            'username' => $request->username,
-            'password' => $request->password
+            $loginType => $request->username,
+            'password' => $request->password,
         ];
 
         if (Auth::attempt($data)) {
+            $user = Auth::user();
+            
             // Cek peran pengguna setelah login berhasil
-            if (Auth::user()->role == 1) {
-                return redirect()->route('admin.pages.admin.dashboard');
-            } elseif (Auth::user()->role == 2) {
-                return redirect()->route('pegawai.pages.pegawai.dashboard');
+            if ($user->active == 0) {
+                return redirect()->route('auth.login')->with('failed', 'Your Account was inactive, contact your admin');
+            }
+        
+            // Redirect sesuai peran pengguna jika status aktif
+            if ($user->role == 0) {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role == 1) {
+                return redirect()->route('pegawai.dashboard');
+            } elseif ($user->role == 2) {
+                return redirect()->route('atasan.dashboard');
             }
         } else {
+            // Redirect kembali ke halaman login jika gagal
             return redirect()->route('auth.login')->with('failed', 'Username atau Password anda salah!');
         }
     }
