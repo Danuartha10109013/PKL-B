@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Str;
+use Illuminate\Support\Str;
 
 class UsersTableSeeder extends Seeder
 {
@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'username' => 'john_doe',
+                'username' => 'admin',
                 'name' => 'John Doe',
                 'no_pegawai' => 'EMP001',
                 'jabatan' => 'Manager',
@@ -25,15 +25,15 @@ class UsersTableSeeder extends Seeder
                 'profile' => null,
                 'role' => '0',
                 'birthday' => '1985-08-25',
-                'email' => 'johndoe@example.com',
+                'email' => 'admin@a.com',
                 'email_verified_at' => now(),
-                'password' => Hash::make('password123'),
-                // 'remember_token' => str_random(10),
+                'password' => Hash::make('admin'),
+                'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'username' => 'jane_smith',
+                'username' => 'pegawai',
                 'name' => 'Jane Smith',
                 'no_pegawai' => 'EMP002',
                 'jabatan' => 'Developer',
@@ -42,10 +42,10 @@ class UsersTableSeeder extends Seeder
                 'profile' => null,
                 'role' => '1',
                 'birthday' => '1990-12-10',
-                'email' => 'janesmith@example.com',
+                'email' => 'pegawai@p.com',
                 'email_verified_at' => now(),
-                'password' => Hash::make('password123'),
-                // 'remember_token' => Str::random(10),
+                'password' => Hash::make('pegawai'),
+                'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -14,40 +14,36 @@ class LoginController extends Controller
 
     public function login_proses(Request $request)
     {
-        // dd($request->all());
         $loginType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        $data = [
+        $credentials = [
             $loginType => $request->username,
             'password' => $request->password,
         ];
 
-        if (Auth::attempt($data)) {
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            
-            // Cek peran pengguna setelah login berhasil
+
             if ($user->active == 0) {
-                return redirect()->route('auth.login')->with('failed', 'Your Account was inactive, contact your admin');
+                return redirect()->route('auth.login')->with('error', 'Your Account was inactive, contact your admin');
             }
-        
-            // Redirect sesuai peran pengguna jika status aktif
+
             if ($user->role == 0) {
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.dashboard')->with('success','Login Success, Hallo '. Auth::user()->name);
             } elseif ($user->role == 1) {
-                return redirect()->route('pegawai.dashboard');
+                return redirect()->route('pegawai.dashboard')->with('success','Login Success, Hallo '. Auth::user()->name);
             } elseif ($user->role == 2) {
-                return redirect()->route('atasan.dashboard');
+                return redirect()->route('atasan.dashboard')->with('success','Login Success, Hallo '. Auth::user()->name);
             }
         } else {
-            // Redirect kembali ke halaman login jika gagal
-            return redirect()->route('auth.login')->with('failed', 'Username atau Password anda salah!');
+            return redirect()->route('auth.login')->with('error', 'Username atau Password anda salah!');
         }
     }
-
 
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('auth.login')->with('succes', 'Kamu berhasil Logout');
+        return redirect()->route('auth.login')->with('success', 'Kamu berhasil Logout');
     }
+
 }
