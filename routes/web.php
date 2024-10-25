@@ -53,8 +53,9 @@ Route::middleware([AutoLogout::class])->group(function () {
         Route::prefix('absensi')->group(function () {
             Route::get('/',[AbsensiController::class,'index'])->name('absensi');
             Route::get('/masuk',[AbsensiController::class,'masuk'])->name('absensi.masuk');
-            Route::get('/pulang',[AbsensiController::class,'pulang'])->name('absensi.pulang');
             Route::post('/storemasuk',[AbsensiController::class,'absensiMasuk'])->name('absensi.masuk.store');
+            Route::get('/pulang',[AbsensiController::class,'pulang'])->name('absensi.pulang');
+            Route::post('/storepulang',[AbsensiController::class,'absensiPulang'])->name('absensi.pulang.store');
         });
    });
     

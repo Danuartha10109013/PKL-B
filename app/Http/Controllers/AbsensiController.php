@@ -66,5 +66,26 @@ class AbsensiController extends Controller
         // Return path relatif yang dapat digunakan untuk ditampilkan atau disimpan di database
         return 'storage/absensi/' . $fileName;
     }
+
+    public function pulang(){
+        return view('pages.pegawai.absensi.absen-pulang');
+    }
+
+    public function absensiPulang(Request $request){
+        $request->validate([
+            'location_pulang' => 'required|string',
+        ]);
+
+        $absensi = new AbsensiM;
+
+        $absensi->location = $request->location_pulang;
+        $absensi->user_id = Auth::user()->id;
+        $absensi->type = "pulang";
+
+        $absensi->save();
+
+        return redirect()->route('pegawai.absensi')->with('success','Absen Pulang Sukses');
+
+    }
 }
 
