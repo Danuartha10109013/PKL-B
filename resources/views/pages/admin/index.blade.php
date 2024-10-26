@@ -1,6 +1,6 @@
 @extends('layout.main')
 @section('title')
-Dashboard || Pegawai
+Dashboard || Admin
 @endsection
 @section('content')
 <div class="row">

@@ -1,13 +1,19 @@
 <?php
 
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FullCalenderController;
 use App\Http\Controllers\KelolaAbsensiController;
+use App\Http\Controllers\KelolaCutiController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AutoLogout;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
+
+
 
 // Routes for authentication
 Route::get('/', [LoginController::class, 'index'])->name('auth.login');
@@ -43,6 +49,20 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::put('/konfirmasi/{id}',[KelolaAbsensiController::class,'confirm'])->name('kabsensi.konfirmasi');
         });
 
+        Route::prefix('kcuti')->group(function () {
+            Route::get('/',[KelolaCutiController::class,'index'])->name('kcuti');
+            Route::put('/update/{id}',[KelolaCutiController::class,'update'])->name('kcuti.update');
+            Route::get('/download/{id}',[KelolaCutiController::class,'download'])->name('kcuti.download');
+            // Route::get('/download/{file}', function ($file) {
+            //     $filePath = public_path('bukti/' . $file); // Adjust as needed
+            
+            //     if (file_exists($filePath)) {
+            //         return response()->download($filePath);
+            //     } else {
+            //         abort(404, 'File not found.');
+            //     }
+            // })->name('download');
+        });
     });
 
     //Pegawai
@@ -57,6 +77,15 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('/pulang',[AbsensiController::class,'pulang'])->name('absensi.pulang');
             Route::post('/storepulang',[AbsensiController::class,'absensiPulang'])->name('absensi.pulang.store');
         });
+        Route::prefix('cuti')->group(function () {
+
+            Route::get('/',[CutiController::class,'index'])->name('cuti');
+            Route::post('/store',[CutiController::class,'store'])->name('cuti.store');
+            //cc Calendar
+            Route::controller(FullCalenderController::class)->group(function(){
+                Route::get('fullcalender', 'index')->name('calendar');
+                Route::post('fullcalenderAjax', 'ajax');
+        });
    });
-    
+});
 });

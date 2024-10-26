@@ -25,7 +25,7 @@
       </a>
     </li>
     <li class="sidebar-item">
-      <a class="sidebar-link" href="./ui-card.html" aria-expanded="false">
+      <a class="sidebar-link" href="{{route('pegawai.cuti')}}" aria-expanded="false">
         <span>
           <i class="ti ti-cards"></i>
         </span>
