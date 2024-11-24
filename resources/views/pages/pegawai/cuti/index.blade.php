@@ -13,7 +13,7 @@ Cuti || Pegawai
             </div>
             
           </div>
-          <p>Total Cuti tersedia Tahun ini : 12</p>
+          <p>Total Cuti tersedia Tahun ini : {{Auth::user()->saldo_cuti}}</p>
           <div class="row">
             <div class="col-md-6">
                 <a href="{{route('pegawai.calendar')}}" class="btn btn-success">Ajukan Cuti tahunan</a>

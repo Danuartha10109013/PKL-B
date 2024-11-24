@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuti;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +22,21 @@ class KelolaCutiController extends Controller
         'status' => 'required|string|max:255',
     ]);
 
+    
     $cuti = Cuti::findOrFail($id);
+    $start = Carbon::parse($cuti->start);
+    $end = Carbon::parse($cuti->end);
+
+    // Calculate the number of days
+    $hari = -($end->diffInDays($start));
+    // dd($hari);
+    
+    if($request->status == "Disetujui"){
+        $user = User::find($cuti->user_id);
+        $user->saldo_cuti= $user->saldo_cuti - $hari;
+        $user->save();
+        // dd($user);
+    }
     $cuti->keterangan = $request->input('keterangan');
     if($request->status == "Disetujui"){
         $cuti->status = 1;
@@ -36,6 +52,7 @@ public function download($id)
 {
     // Fetch the record from the Cuti model
     $cuti = Cuti::find($id);
+    // dd($cuti);
 
     // Check if the record exists
     if (!$cuti) {
@@ -43,7 +60,7 @@ public function download($id)
     }
 
     // Construct the full path to the file without 'assets'
-    $path = public_path('storage/bukti/' . $cuti->bukti);
+    $path = public_path('storage/' . $cuti->bukti);
 
     // Debugging: Check the path (you can remove this in production)
     // dd($path);
