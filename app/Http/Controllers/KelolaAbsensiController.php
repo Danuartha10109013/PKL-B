@@ -12,15 +12,15 @@ use Maatwebsite\Excel\Facades\Excel;
 class KelolaAbsensiController extends Controller
 {
     public function index(){
-        $tepatmasuk = AbsensiM::whereTime('created_at', '<=', '09:00:00')->where('confirmation', null)->where('type','masuk')->get();
+        $tepatmasuk = AbsensiM::whereTime('created_at', '<=', '09:00:00')->where('confirmation', null)->orderBy('created_at','desc')->where('type','masuk')->get();
         $same = AbsensiM::whereTime('created_at', '<=', '09:00:00')->where('confirmation', null)->value('id');
-        $verivikasi = AbsensiM::where('id',$same)->where('type','masuk')->where('confirmation', null)->value('verivikasi');
-        $telatmasuk = AbsensiM::whereTime('created_at', '>', '09:00:00')->where('confirmation', null)->where('type','masuk')->get();
+        $verivikasi = AbsensiM::where('id',$same)->orderBy('created_at','desc')->where('type','masuk')->where('confirmation', null)->value('verivikasi');
+        $telatmasuk = AbsensiM::whereTime('created_at', '>', '09:00:00')->where('confirmation', null)->orderBy('created_at','desc')->where('type','masuk')->get();
 
-        $tepatpulang = AbsensiM::whereTime('created_at', '>=', '17:00:00')->where('confirmation', null)->where('type','pulang')->get();
-        $samepulang = AbsensiM::whereTime('created_at', '<=', '09:00:00')->where('confirmation', null)->where('type','pulang')->value('id');
-        $verivikasipulang = AbsensiM::where('id',$samepulang)->where('type','pulang')->where('confirmation', null)->value('verivikasi');
-        $telatpulang = AbsensiM::whereTime('created_at', '<', '17:00:00')->where('confirmation', null)->where('type','pulang')->get();
+        $tepatpulang = AbsensiM::whereTime('created_at', '>=', '17:00:00')->where('confirmation', null)->orderBy('created_at','desc')->where('type','pulang')->get();
+        $samepulang = AbsensiM::whereTime('created_at', '<=', '09:00:00')->where('confirmation', null)->orderBy('created_at','desc')->where('type','pulang')->value('id');
+        $verivikasipulang = AbsensiM::where('id',$samepulang)->orderBy('created_at','desc')->where('type','pulang')->where('confirmation', null)->value('verivikasi');
+        $telatpulang = AbsensiM::whereTime('created_at', '<', '17:00:00')->where('confirmation', null)->orderBy('created_at','desc')->where('type','pulang')->get();
 
         $terkonfirmasi = AbsensiM::orderBy('created_at','desc')->get();
 

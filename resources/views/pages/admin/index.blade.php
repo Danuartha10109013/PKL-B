@@ -4,12 +4,12 @@ Dashboard || Admin
 @endsection
 @section('content')
 <div class="row">
-  <div class="col-lg-8 d-flex align-items-strech">
+  <div class="col-lg-9 d-flex align-items-stretch">
     <div class="card w-100">
         <div class="card-body">
+          <h5 class="card-title fw-semibold">Tren Absensi</h5>
             <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                 <div class="mb-3 mb-sm-0">
-                    <h5 class="card-title fw-semibold">Tren Absensi</h5>
                 </div>
                 <div>
                     <form method="GET" action="{{ route('admin.dashboard') }}">
@@ -33,19 +33,40 @@ Dashboard || Admin
                 var attendanceChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['Absen Masuk', 'Absen Pulang'],
-                        datasets: [{
-                            label: 'Jumlah Absensi Tahun {{ $year }}',
-                            data: [{{ $absenMasuk }}, {{ $absenPulang }}],
-                            backgroundColor: ['#4caf50', '#ff5733'],
-                            borderColor: ['#4caf50', '#ff5733'],
-                            borderWidth: 1
-                        }]
+                        labels: {!! json_encode($months) !!},
+                        datasets: [
+                            {
+                                label: 'Absen Masuk',
+                                data: {!! json_encode($absenMasukCounts) !!},
+                                backgroundColor: '#4caf50',
+                                borderColor: '#4caf50',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Absen Pulang',
+                                data: {!! json_encode($absenPulangCounts) !!},
+                                backgroundColor: '#ff5733',
+                                borderColor: '#ff5733',
+                                borderWidth: 1
+                            }
+                        ]
                     },
                     options: {
+                        responsive: true,
                         scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Months'
+                                }
+                            },
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Jumlah Absensi'
+                                }
                             }
                         }
                     }
@@ -53,10 +74,11 @@ Dashboard || Admin
             </script>
         </div>
     </div>
-  </div>
+</div>
 
 
-    <div class="col-lg-4">
+
+    <div class="col-lg-3">
       <div class="row">
         <div class="col-lg-12">
           <!-- Yearly Breakup -->
@@ -66,30 +88,10 @@ Dashboard || Admin
               <div class="row align-items-center">
                 <div class="col-8">
                   <h4 class="fw-semibold mb-3">{{$todaylate}}</h4>
-                  <div class="d-flex align-items-center mb-3">
-                    <span
-                      class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
-                      <i class="ti ti-arrow-up-left text-success"></i>
-                    </span>
-                    <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                    <p class="fs-3 mb-0">last year</p>
-                  </div>
-                  <div class="d-flex align-items-center">
-                    <div class="me-4">
-                      <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
-                      <span class="fs-2">2023</span>
-                    </div>
-                    <div>
-                      <span class="round-8 bg-light-primary rounded-circle me-2 d-inline-block"></span>
-                      <span class="fs-2">2023</span>
-                    </div>
-                  </div>
+                  
+                  
                 </div>
-                <div class="col-4">
-                  <div class="d-flex justify-content-center">
-                    <div id="breakup"></div>
-                  </div>
-                </div>
+                
               </div>
             </div>
           </div>
@@ -102,26 +104,10 @@ Dashboard || Admin
                 <div class="col-8">
                   <h5 class="card-title mb-9 fw-semibold"> Monthly Leaves </h5>
                   <h4 class="fw-semibold mb-3">{{$monthlyleaves}}</h4>
-                  <div class="d-flex align-items-center pb-1">
-                    <span
-                      class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
-                      <i class="ti ti-arrow-down-right text-danger"></i>
-                    </span>
-                    <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                    <p class="fs-3 mb-0">last year</p>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="d-flex justify-content-end">
-                    <div
-                      class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                      <i class="ti ti-currency-dollar fs-6"></i>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             </div>
-            <div id="earning"></div>
           </div>
         </div>
       </div>

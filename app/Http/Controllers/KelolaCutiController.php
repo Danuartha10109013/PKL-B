@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 class KelolaCutiController extends Controller
 {
     public function index(){
-        $data = Cuti::where('status',0)->get();
-        $data1 = Cuti::where('status', '!=', '0')->get();
+        $data = Cuti::where('status',0)->orderBy('created_at','desc')->get();
+        $data1 = Cuti::where('status', '!=', '0')->orderBy('created_at','desc')->get();
         return view('pages.admin.kcuti.index',compact('data','data1'));
     }
     public function update(Request $request, $id)
@@ -31,11 +31,21 @@ class KelolaCutiController extends Controller
         $hari = -($end->diffInDays($start));
         // dd($hari);
         if($cuti->jenis_cuti == 'tahunan'){
-            if($request->status == "Disetujui"){
+            if ($request->status == "Disetujui") {
+                // Calculate the number of days for the leave, including the start and end dates
+                $saldo = Carbon::parse($cuti->start)->diffInDays(Carbon::parse($cuti->end));
                 $user = User::find($cuti->user_id);
-                $user->saldo_cuti= $user->saldo_cuti - $hari;
+            
+                // Check if the user has enough leave balance
+                if ($user->saldo_cuti < $saldo) {
+                    return back()->with('error', 'Saldo Tidak mencukupi, sisa : ' . $user->saldo_cuti);
+                }
+            
+                // Deduct the leave days from the user's balance
+                $user->saldo_cuti = $user->saldo_cuti - $saldo;
                 $user->save();
             }
+            
         }
         $cuti->keterangan = $request->input('keterangan');
         if($request->status == "Disetujui"){
@@ -73,6 +83,98 @@ public function download($id)
     // Return the file as a download response
     return response()->download($path);
 }
+
+public function updatin(Request $request,$id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'jenis_cuti' => 'required|string|max:255',
+            'alasan_cuti' => 'required|string',
+            'start' => 'required|date',
+            'end' => 'required|date|after_or_equal:start',
+            'status' => 'required|in:2,1',
+        ]);
+    
+        $cuti = Cuti::findOrFail($id);
+        $ids = User::where('id', $cuti->user_id)->value('id');
+        $uzer = User::find($ids);
+        $saldo = Carbon::parse($request->start)->diffInDays(Carbon::parse($request->end)) + 1;
+
+        if ($request->status == 1 && $cuti->jenis_cuti == 'tahunan' && $uzer->saldo_cuti < $saldo) {
+            
+            $cuti->update([
+                'title' => $request->input('title'),
+                'jenis_cuti' => $request->input('jenis_cuti'),
+                'alasan_cuti' => $request->input('alasan_cuti'),
+                'start' => $request->input('start'),
+                'end' => $request->input('end'),
+            ]);
+
+            $user = Cuti::where('id', $id)->value('user_id');
+            // dd($user);
+            if ($user) {
+                // Find the user and update their leave balance
+                $userin = User::find($user);
+                if($userin->saldo_cuti < $saldo){
+                    $cutin = Cuti::find($id);
+                    return redirect()->back()->with('error','Saldo cuti tidak mencukupi, Saldo : '.$userin->saldo_cuti);
+                }else {
+                    $userin->saldo_cuti = $userin->saldo_cuti - $saldo;
+                    $userin->save();
+                }
+            }
+        }elseif($request->status == 1 && $cuti->jenis_cuti == 'tahunan'){
+
+            $cuti->update([
+                'title' => $request->input('title'),
+                'jenis_cuti' => $request->input('jenis_cuti'),
+                'alasan_cuti' => $request->input('alasan_cuti'),
+                'start' => $request->input('start'),
+                'end' => $request->input('end'),
+                'status' => $request->input('status'),
+            ]);
+            
+            $user = Cuti::where('id', $id)->value('user_id');
+            // dd($user);
+            if ($user) {
+                // Find the user and update their leave balance
+                $userin = User::find($user);
+                if($userin->saldo_cuti < $saldo){
+                    $cutin = Cuti::find($id);
+                    return redirect()->back()->with('error','Saldo cuti tidak mencukupi, Saldo : '.$userin->saldo_cuti);
+                }else {
+                    $userin->saldo_cuti = $userin->saldo_cuti - $saldo;
+                    $userin->save();
+                }
+            }
+        }
+        else{
+            $cuti->update([
+                'title' => $request->input('title'),
+                'jenis_cuti' => $request->input('jenis_cuti'),
+                'alasan_cuti' => $request->input('alasan_cuti'),
+                'start' => $request->input('start'),
+                'end' => $request->input('end'),
+                'status' => $request->input('status'),
+            ]);
+
+            $user = Cuti::where('id', $id)->value('user_id');
+            // dd($user);
+            if ($user) {
+                // Find the user and update their leave balance
+                $userin = User::find($user);
+                
+                if ($userin) {
+                    $userin->saldo_cuti += $saldo;
+                    $userin->save();
+                }
+            }
+        }
+
+    
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Data cuti berhasil diperbarui.');
+    }
 
 
 }

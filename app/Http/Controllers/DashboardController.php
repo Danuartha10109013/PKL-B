@@ -32,29 +32,53 @@ class DashboardController extends Controller
           $startDate = $request->input('start_date', null);
           $endDate = $request->input('end_date', null);
   
-          // Filter query based on input
-          $query = AbsensiM::query();
-  
-          // Filter by date range if specified
-          if ($startDate && $endDate) {
-              $query->whereBetween('created_at', [$startDate, $endDate]);
-          }
-  
-          // Filter by month if specified
-          if ($month) {
-              $query->whereMonth('created_at', $month);
-          }
-  
-          // Filter by year if specified (defaults to current year)
-          $query->whereYear('created_at', $year);
-  
-          // Get counts for "masuk" and "pulang"
-          $absenMasuk = $query->where('type', 'masuk')->count();
-          $absenPulang = $query->where('type', 'pulang')->count();
-  
-          // Get the total count for the year to show in the chart
-          $totalAbsensi = AbsensiM::whereYear('created_at', $year)->count();
+           // Retrieve filters from the request
+            $month = $request->input('month');
+            $year = $request->input('year', date('Y'));
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
 
-        return view('pages.admin.index',compact('absen','cuti','todaylate','monthlyleaves','data','absenMasuk','absenPulang','totalAbsensi', 'year', 'month'));
+            // Filter query based on input
+            $query = AbsensiM::query();
+
+            // Filter by date range if specified
+            if ($startDate && $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+
+            // Filter by month if specified
+            if ($month) {
+                $query->whereMonth('created_at', $month);
+            }
+
+            // Filter by year if specified (defaults to current year)
+            $query->whereYear('created_at', $year);
+
+            // Get monthly counts for "masuk" and "pulang"
+            $monthlyData = $query->selectRaw('MONTH(created_at) as month, 
+                                                SUM(CASE WHEN type = "masuk" THEN 1 ELSE 0 END) as absen_masuk, 
+                                                SUM(CASE WHEN type = "pulang" THEN 1 ELSE 0 END) as absen_pulang')
+                                    ->groupBy('month')
+                                    ->orderBy('month')
+                                    ->get();
+
+            $months = $monthlyData->pluck('month')->map(function ($month) {
+                return date('F', mktime(0, 0, 0, $month, 1)); // Convert month number to month name
+            });
+            $absenMasukCounts = $monthlyData->pluck('absen_masuk');
+            $absenPulangCounts = $monthlyData->pluck('absen_pulang');
+
+        return view('pages.admin.index',
+        compact('absen',
+        'cuti',
+        'todaylate',
+        'monthlyleaves',
+        'data',
+        'absenMasukCounts',
+        'absenPulangCounts',
+        'year', 
+        'month',
+        'months',
+    ));
     }
 }

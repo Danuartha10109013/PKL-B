@@ -44,32 +44,45 @@ class FullCalenderController extends Controller
             // Calculate total days of leave requested
             $start = Carbon::parse($request->start);
             $end = Carbon::parse($request->end);
-            $totalDays = $start->diffInDays($end) + 1; // Add 1 to include the start day
-    
+            $totalDays = $start->diffInDays($end) + 1; // Include the start day
+        
             // Get the user's leave balance (saldo_cuti)
             $user = Auth::user();
-    
+        
             // Check if the user has enough leave balance
             if ($user->saldo_cuti < $totalDays) {
                 return response()->json([
-                    'error' => 'Saldo Cuti kurang, Saldo : '.Auth::user()->saldo_cuti,
+                    'error' => 'Saldo Cuti kurang, Saldo: ' . $user->saldo_cuti,
                 ], 400); // 400 Bad Request
             }
-    
-            // Create the leave request if the balance is sufficient
+        
+            // Check for overlapping leave requests
+            $overlappingLeave = Cuti::where('status', 1) // Only approved leave requests
+                ->where(function ($query) use ($start, $end) {
+                    $query->whereBetween('start', [$start, $end])
+                        ->orWhereBetween('end', [$start, $end])
+                        ->orWhere(function ($query) use ($start, $end) {
+                            $query->where('start', '<=', $start)
+                                  ->where('end', '>=', $end);
+                        });
+                })
+                ->exists();
+        
+            $status = $overlappingLeave ? 2 : 0; // Status 2 if overlapping, otherwise 0
+        
+            // Create the leave request
             $event = Cuti::create([
                 'title' => $request->title,
                 'start' => $request->start,
                 'end' => $request->end,
                 'user_id' => $user->id,
-                'status' => 0,
+                'status' => $status,
                 'alasan_cuti' => $request->alasan_cuti,
                 'jenis_cuti' => 'tahunan',
             ]);
-    
-            
-    
+        
             return response()->json($event);
+        
 
         case 'update':
             $event = Cuti::find($request->id);

@@ -52,17 +52,9 @@ Route::middleware([AutoLogout::class])->group(function () {
 
         Route::prefix('kcuti')->group(function () {
             Route::get('/',[KelolaCutiController::class,'index'])->name('kcuti');
+            Route::put('/updatin/{id}',[KelolaCutiController::class,'updatin'])->name('kcuti.updatin');
             Route::put('/update/{id}',[KelolaCutiController::class,'update'])->name('kcuti.update');
             Route::get('/download/{id}',[KelolaCutiController::class,'download'])->name('kcuti.download');
-            // Route::get('/download/{file}', function ($file) {
-            //     $filePath = public_path('bukti/' . $file); // Adjust as needed
-            
-            //     if (file_exists($filePath)) {
-            //         return response()->download($filePath);
-            //     } else {
-            //         abort(404, 'File not found.');
-            //     }
-            // })->name('download');
         });
     });
 
