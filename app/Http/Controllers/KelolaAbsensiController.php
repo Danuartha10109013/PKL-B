@@ -2,20 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CC;
 use App\Models\AbsensiM;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class KelolaAbsensiController extends Controller
 {
     public function index(){
-        $tepat = AbsensiM::whereTime('created_at', '<=', '09:00:00')->get();
-        $same = AbsensiM::whereTime('created_at', '<=', '09:00:00')->value('id');
-        $verivikasi = AbsensiM::where('id',$same)->value('verivikasi');
-        // dd($verivikasi);
-        $telat = AbsensiM::whereTime('created_at', '>', '09:00:00')->get();
+        $tepatmasuk = AbsensiM::whereTime('created_at', '<=', '09:00:00')->where('confirmation', null)->where('type','masuk')->get();
+        $same = AbsensiM::whereTime('created_at', '<=', '09:00:00')->where('confirmation', null)->value('id');
+        $verivikasi = AbsensiM::where('id',$same)->where('type','masuk')->where('confirmation', null)->value('verivikasi');
+        $telatmasuk = AbsensiM::whereTime('created_at', '>', '09:00:00')->where('confirmation', null)->where('type','masuk')->get();
 
-        return view('pages.admin.kabsensi.index',compact('tepat','telat','verivikasi'));
+        $tepatpulang = AbsensiM::whereTime('created_at', '>=', '17:00:00')->where('confirmation', null)->where('type','pulang')->get();
+        $samepulang = AbsensiM::whereTime('created_at', '<=', '09:00:00')->where('confirmation', null)->where('type','pulang')->value('id');
+        $verivikasipulang = AbsensiM::where('id',$samepulang)->where('type','pulang')->where('confirmation', null)->value('verivikasi');
+        $telatpulang = AbsensiM::whereTime('created_at', '<', '17:00:00')->where('confirmation', null)->where('type','pulang')->get();
+
+        $terkonfirmasi = AbsensiM::orderBy('created_at','desc')->get();
+
+        return view('pages.admin.kabsensi.index',compact('tepatmasuk','telatmasuk','verivikasi','tepatpulang','telatpulang','verivikasipulang','terkonfirmasi'));
     }
 
     public function confirm(Request $request,$id){
@@ -29,9 +38,15 @@ class KelolaAbsensiController extends Controller
         $data-> verivikasi_oleh = $request->verivikasi_oleh;
         $data-> confirmation = $request->verivikasi;
         $data-> keterangan = $request->keterangan;
-        $data->update();
+        $data->save();
+        // dd($request->all());
 
         $name = User::where('id', $data->id)->value('name');
         return redirect()->route('admin.kabsensi')->with('success','Absensi '.$name.' Telah terkonfirmasi');
+    }
+
+    public function export(){
+        $date = now()->format('d-m-Y'); 
+        return Excel::download(new CC, $date . 'Absensi.xlsx');
     }
 }

@@ -12,7 +12,7 @@
 
                 <div class="row">
                     <!-- Pengajuan Cuti Section -->
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-12 mb-4">
                         <h6>Pengajuan Cuti</h6>
                         <div class="table-responsive">
                             <table class="table table-bordered">
@@ -36,7 +36,7 @@
                                         <td>{{ $d->jenis_cuti }}</td>
                                         <td>
                                             @php
-                                                $nama = \App\Models\User::where('id',$d->user_id)->value('name');
+                                                $nama = \App\Models\User::where('id', $d->user_id)->value('name');
                                             @endphp
                                             {{ $nama }}
                                         </td>
@@ -47,44 +47,43 @@
                                             @php
                                                 $file = \App\Models\Cuti::where('id', $d->id)->value('bukti');
                                             @endphp
-
-                                            @if ($file)  {{-- Ensure the file exists --}}
-                                                <a href="{{route('admin.kcuti.download',$d->id)}}" class="btn btn-warning mb-2 ml-2">Download Bukti</a>
+                            
+                                            @if ($file)
+                                                <a href="{{ route('admin.kcuti.download', $d->id) }}" class="btn btn-warning mb-2 ml-2">Download Bukti</a>
                                             @endif
-
-
-                                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal" 
-                                               data-id="{{ $d->id }}" data-keterangan="{{ $d->keterangan }}">Response</a>
+                            
+                                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" 
+                                               data-bs-target="#updateModal{{ $d->id }}">Response</a>
+                            
                                             <!-- Modal -->
-                                            <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-bs-labelledby="updateModalLabel" aria-bs-hidden="true">
+                                            <div class="modal fade" id="updateModal{{ $d->id }}" tabindex="-1" 
+                                                 role="dialog" aria-labelledby="updateModalLabel{{ $d->id }}" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="updateModalLabel">Update Leave Request</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
+                                                            <h5 class="modal-title" id="updateModalLabel{{ $d->id }}">Update Leave Request</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form id="updateCutiForm" action="{{ route('admin.kcuti.update',$d->id) }}" method="POST">
+                                                            <form id="updateCutiForm{{ $d->id }}" action="{{ route('admin.kcuti.update', $d->id) }}" method="POST">
                                                                 @csrf
-                                                                @method('PUT') <!-- Ensure you set this if you're using PUT method -->
-                                                                <input type="hidden" name="id" id="cutiId" value="">
-                                                                
+                                                                @method('PUT')
+                                                                <input type="text" name="id" value="{{ $d->id }}">
+                            
                                                                 <div class="mb-3">
-                                                                    <label for="keterangan" class="form-label">Keterangan</label>
-                                                                    <textarea class="form-control" name="keterangan" id="keterangan" rows="3" required></textarea>
+                                                                    <label for="keterangan{{ $d->id }}" class="form-label">Keterangan</label>
+                                                                    <textarea class="form-control" name="keterangan" id="keterangan{{ $d->id }}" rows="3" required></textarea>
                                                                 </div>
-                                                                
+                            
                                                                 <div class="mb-3">
-                                                                    <label for="status" class="form-label">Status</label>
-                                                                    <select class="form-control" name="status" id="status" required>
+                                                                    <label for="status{{ $d->id }}" class="form-label">Status</label>
+                                                                    <select class="form-control" name="status" id="status{{ $d->id }}" required>
                                                                         <option value="" selected disabled>--Pilih Status--</option>
                                                                         <option value="Disetujui">Disetujui</option>
                                                                         <option value="Ditolak">Ditolak</option>
                                                                     </select>
                                                                 </div>
-                                                                
+                            
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                             </form>
                                                         </div>
@@ -96,12 +95,13 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            
                         </div>
                     </div>
                     
                     <!-- Riwayat Cuti Section -->
-                    <div class="col-md-6 mb-4">
-                        <h6 class="text-end">Riwayat Cuti</h6>
+                    <div class="col-md-12 mb-4">
+                        <h6 class="text-start mb-2">Riwayat Cuti</h6>
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>

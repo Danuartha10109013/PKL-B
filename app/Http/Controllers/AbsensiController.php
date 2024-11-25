@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Storage;
 class AbsensiController extends Controller
 {
     public function index(){
-        return view('pages.pegawai.absensi.index');
+        $absen = AbsensiM::where('user_id',Auth::user()->id)->get();
+        return view('pages.pegawai.absensi.index',compact('absen'));
     }
 
     public function masuk(){

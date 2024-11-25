@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 class CutiController extends Controller
 {
     public function index(){
-        $data = Cuti::where('jenis_cuti','tahunan')->get();
-        $data1 = Cuti::where('jenis_cuti', '!=', 'tahunan')->get();
+        $data = Cuti::where('jenis_cuti','tahunan')->where('user_id',Auth::user()->id)->get();
+        $data1 = Cuti::where('jenis_cuti', '!=', 'tahunan')->where('user_id',Auth::user()->id)->get();
         return view('pages.pegawai.cuti.index',compact('data','data1'));
     }
     public function store(Request $request)

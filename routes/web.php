@@ -46,6 +46,7 @@ Route::middleware([AutoLogout::class])->group(function () {
         });
         Route::prefix('kabsensi')->group(function () {
             Route::get('/',[KelolaAbsensiController::class,'index'])->name('kabsensi');
+            Route::get('/export',[KelolaAbsensiController::class,'export'])->name('kabsensi.export');
             Route::put('/konfirmasi/{id}',[KelolaAbsensiController::class,'confirm'])->name('kabsensi.konfirmasi');
         });
 

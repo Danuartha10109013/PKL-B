@@ -19,6 +19,7 @@ class AbsensiM extends Model
         'photo', 
         'type',
         'verifikasi',
+        'confirmation',
         'verifikasi_oleh',
     ];
 

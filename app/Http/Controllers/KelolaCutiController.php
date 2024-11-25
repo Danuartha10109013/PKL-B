@@ -16,37 +16,37 @@ class KelolaCutiController extends Controller
         return view('pages.admin.kcuti.index',compact('data','data1'));
     }
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'keterangan' => 'required|string|max:255',
-        'status' => 'required|string|max:255',
-    ]);
+    {
+        $request->validate([
+            'keterangan' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
+        ]);
 
-    
-    $cuti = Cuti::findOrFail($id);
-    $start = Carbon::parse($cuti->start);
-    $end = Carbon::parse($cuti->end);
+        
+        $cuti = Cuti::findOrFail($id);
+        $start = Carbon::parse($cuti->start);
+        $end = Carbon::parse($cuti->end);
 
-    // Calculate the number of days
-    $hari = -($end->diffInDays($start));
-    // dd($hari);
-    
-    if($request->status == "Disetujui"){
-        $user = User::find($cuti->user_id);
-        $user->saldo_cuti= $user->saldo_cuti - $hari;
-        $user->save();
-        // dd($user);
+        // Calculate the number of days
+        $hari = -($end->diffInDays($start));
+        // dd($hari);
+        if($cuti->jenis_cuti == 'tahunan'){
+            if($request->status == "Disetujui"){
+                $user = User::find($cuti->user_id);
+                $user->saldo_cuti= $user->saldo_cuti - $hari;
+                $user->save();
+            }
+        }
+        $cuti->keterangan = $request->input('keterangan');
+        if($request->status == "Disetujui"){
+            $cuti->status = 1;
+        }else{
+            $cuti->status = 2;
+        }
+        $cuti->save();
+
+        return redirect()->route('admin.kcuti')->with('success', 'Leave request updated successfully!');
     }
-    $cuti->keterangan = $request->input('keterangan');
-    if($request->status == "Disetujui"){
-        $cuti->status = 1;
-    }else{
-        $cuti->status = 2;
-    }
-    $cuti->save();
-
-    return redirect()->route('admin.kcuti')->with('success', 'Leave request updated successfully!');
-}
 
 public function download($id)
 {

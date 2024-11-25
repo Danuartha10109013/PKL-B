@@ -11,7 +11,7 @@ Kelola Pegawai || Admin
         <div class="d-flex justify-content-between">
             <h5 class="card-title fw-semibold mb-4">Kelola Pegawai</h5>
             <!-- Button to trigger Add Modal -->
-            <a href="#" class="badge bg-primary rounded-1 fw-bold mb-3" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Tambah Pegawai</a>
+            <a href="#" class="btn btn-primary rounded-1 fw-bold mb-3" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Tambah Pegawai</a>
         </div>
           
         <div class="table-responsive">
@@ -57,13 +57,13 @@ Kelola Pegawai || Admin
                 <td class="border-bottom-0">
                   <div class="d-flex align-items-center gap-2">
                     @if ($d->active == 1)
-                        <a href="{{route('admin.kelolapegawai.nonactive', $d->id)}}" class="badge bg-primary rounded-3 fw-semibold">Active</a>
+                        <a href="{{route('admin.kelolapegawai.nonactive', $d->id)}}" class="btn  btn-primary fw-semibold">Active</a>
                     @else
-                        <a href="{{route('admin.kelolapegawai.active', $d->id)}}" class="badge bg-warning rounded-3 fw-semibold">Nonctive</a>
+                        <a href="{{route('admin.kelolapegawai.active', $d->id)}}" class="btn  btn-warning fw-semibold">Nonctive</a>
                     @endif
                     <!-- Button to trigger Edit Modal -->
-                    <a href="#" class="badge bg-warning rounded-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#editEmployeeModal-{{$d->id}}">Edit</a>
-                    <a href="{{route('admin.kelolapegawai.delete',$d->id)}}" class="badge bg-danger rounded-3 fw-semibold">Delete</a>
+                    <a href="#" class="btn  btn-warning fw-semibold" data-bs-toggle="modal" data-bs-target="#editEmployeeModal-{{$d->id}}">Edit</a>
+                    <a href="{{route('admin.kelolapegawai.delete',$d->id)}}" class="btn  btn-danger fw-semibold">Delete</a>
                   </div>
                 </td>
                 <td class="border-bottom-0 text-center">
@@ -106,7 +106,7 @@ Kelola Pegawai || Admin
                             <div class="mb-3">
                                 <label for="avatar" class="form-label">Avatar</label>
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/'.$d->profile) }}" alt="{{ $d->profile }}" class="img-fluid rounded" style="max-width: 150px; display: none;" id="avatar-preview">
+                                    <img src="{{ asset('storage/'.$d->profile) }}" alt="{{ $d->profile }}" class="img-fluid rounded" style="max-width: 200px; display: none;" id="avatar-preview">
                                 </div>
                                 <input type="file" id="avatar-input" name="avatar" class="form-control avatar-input" onchange="previewImage(event)">
                             </div>
