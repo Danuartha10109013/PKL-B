@@ -5,13 +5,40 @@ namespace App\Http\Controllers;
 use App\Models\AbsensiM;
 use App\Models\Cuti;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function pegawai()
+    public function pegawai(Request $request)
     {
-        return view('pages.pegawai.index');
+        $query = AbsensiM::where('user_id', Auth::user()->id);
+    
+        // Filter berdasarkan bulan dan tahun
+        if ($request->filled('bulan') && !$request->filled('tahun')) {
+            $query->whereMonth('created_at', $request->bulan)
+                  ->whereYear('created_at', now()->year);
+        } elseif ($request->filled('tahun') && !$request->filled('bulan')) {
+            $query->whereYear('created_at', $request->tahun);
+        } elseif ($request->filled('bulan') && $request->filled('tahun')) {
+            $query->whereMonth('created_at', $request->bulan)
+                  ->whereYear('created_at', $request->tahun);
+        }
+    
+        // Hitung jumlah absen masuk dan subkategori
+        $masukTepat = (clone $query)->where('type', 'masuk')->whereTime('created_at', '<=', '09:00:00')->count();
+        $telatMasuk = (clone $query)->where('type', 'masuk')->whereTime('created_at', '>', '09:00:00')->count();
+    
+        // Hitung jumlah absen pulang dan subkategori
+        $pulangTepat = (clone $query)->where('type', 'pulang')->whereTime('created_at', '>=', '17:00:00')->count();
+        $pulangLebihAwal = (clone $query)->where('type', 'pulang')->whereTime('created_at', '<', '17:00:00')->count();
+    
+        $masuk = $masukTepat + $telatMasuk;
+        $pulang = $pulangTepat + $pulangLebihAwal;
+    
+        return view('pages.pegawai.index', compact('masuk', 'pulang', 'masukTepat', 'telatMasuk', 'pulangTepat', 'pulangLebihAwal'));
     }
+    
+    
     public function admin(Request $request)
     {
         $data = AbsensiM::all();

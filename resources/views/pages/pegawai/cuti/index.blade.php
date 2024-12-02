@@ -52,8 +52,8 @@ Cuti || Pegawai
                             <h6 class="fw-semibold mb-1">{{$d->title}}</h6>
                           </td>
                           <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal {{ $d->status == 0 ? 'text-warning' : 'text-success' }}">
-                                {{ $d->status == 0 ? "Belum Diperiksa" : "Disetujui" }}
+                            <p class="mb-0 fw-normal {{ $d->status == 0 ? 'text-warning' : ($d->status == 1 ? "text-success" : ($d->status == 2 ? "text-danger" : "text-secondary")) }}">
+                              {{ $d->status == 0 ? "Belum Diperiksa" : ($d->status == 1 ? "Disetujui" : ($d->status == 2 ? "Ditolak" : "Unknown")) }}
                             </p>
                           </td>
                           <td class="border-bottom-0">
@@ -105,8 +105,8 @@ Cuti || Pegawai
                                     <h6 class="fw-semibold mb-1">{{ $d->title }}</h6>
                                 </td>
                                 <td class="border-bottom-0">
-                                    <p class="mb-0 fw-normal {{ $d->status == 0 ? 'text-warning' : ($d->status == 1 ? "text-success" : "text-danger") }}">
-                                        {{ $d->status == 0 ? "Belum Diperiksa" : ($d->status == 1 ? "Disetujui" : "Ditolak") }}
+                                    <p class="mb-0 fw-normal {{ $d->status == 0 ? 'text-warning' : ($d->status == 1 ? "text-success" : ($d->status == 2 ? "text-danger" : "text-secondary")) }}">
+                                        {{ $d->status == 0 ? "Belum Diperiksa" : ($d->status == 1 ? "Disetujui" : ($d->status == 2 ? "Ditolak" : "Unknown")) }}
                                     </p>
                                 </td>
                                 <td class="border-bottom-0">

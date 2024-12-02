@@ -4,6 +4,7 @@ use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FullCalenderController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KelolaAbsensiController;
 use App\Http\Controllers\KelolaCutiController;
 use App\Http\Controllers\LoginController;
@@ -13,6 +14,12 @@ use App\Http\Middleware\AutoLogout;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/run-schedule', function () {
+    Artisan::call('schedule:run');
+    return response()->json(['status' => 'Schedule run executed']);
+});
 
 
 // Routes for authentication
@@ -23,7 +30,9 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //auto Logout
 Route::middleware([AutoLogout::class])->group(function () {
-
+    Route::prefix('karyawan')->group(function () {
+        Route::get('/',[KaryawanController::class,'index'])->name('karyawan');
+    });
     //Profile
     Route::prefix('profile')->group(function () {
         Route::get('{id}',[ProfileController::class,'index'])->name('profile');
@@ -66,6 +75,7 @@ Route::middleware([AutoLogout::class])->group(function () {
         Route::prefix('absensi')->group(function () {
             Route::get('/',[AbsensiController::class,'index'])->name('absensi');
             Route::get('/masuk',[AbsensiController::class,'masuk'])->name('absensi.masuk');
+            Route::get('/data',[AbsensiController::class,'data'])->name('absensi.data');
             Route::post('/storemasuk',[AbsensiController::class,'absensiMasuk'])->name('absensi.masuk.store');
             Route::get('/pulang',[AbsensiController::class,'pulang'])->name('absensi.pulang');
             Route::post('/storepulang',[AbsensiController::class,'absensiPulang'])->name('absensi.pulang.store');

@@ -13,6 +13,10 @@ class AbsensiController extends Controller
         $absen = AbsensiM::where('user_id',Auth::user()->id)->get();
         return view('pages.pegawai.absensi.index',compact('absen'));
     }
+    public function data(){
+        $absen = AbsensiM::where('user_id',Auth::user()->id)->get();
+        return view('pages.pegawai.absensi.data',compact('absen'));
+    }
 
     public function masuk(){
         return view('pages.pegawai.absensi.absen-masuk');

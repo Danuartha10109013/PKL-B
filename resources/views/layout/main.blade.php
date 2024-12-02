@@ -89,6 +89,23 @@
   <script src="{{asset('vendor')}}/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
   <script src="{{asset('vendor')}}/assets/libs/simplebar/dist/simplebar.js"></script>
   <script src="{{asset('vendor')}}/assets/js/dashboard.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    setInterval(function() {
+        $.ajax({
+            url: '/run-schedule',
+            method: 'GET',
+            success: function(response) {
+                console.log(response.status);
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    }, 60000); // 60000ms = 1 menit
+</script>
+
 </body>
 
 </html>

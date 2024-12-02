@@ -16,6 +16,6 @@ class Cuti extends Model
      */
     protected $table = 'cuti';
     protected $fillable = [
-        'title', 'start', 'end','alasan_cuti','status','keterangan','user_id','jenis_cuti','bukti'
+        'title', 'start', 'end','alasan_cuti','status','keterangan','user_id','jenis_cuti','bukti','score'
     ];
 }

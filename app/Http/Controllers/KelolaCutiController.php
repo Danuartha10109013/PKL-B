@@ -15,6 +15,9 @@ class KelolaCutiController extends Controller
         $data1 = Cuti::where('status', '!=', '0')->orderBy('created_at','desc')->get();
         return view('pages.admin.kcuti.index',compact('data','data1'));
     }
+
+
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -33,7 +36,8 @@ class KelolaCutiController extends Controller
         if($cuti->jenis_cuti == 'tahunan'){
             if ($request->status == "Disetujui") {
                 // Calculate the number of days for the leave, including the start and end dates
-                $saldo = Carbon::parse($cuti->start)->diffInDays(Carbon::parse($cuti->end));
+                $saldo = Carbon::parse($cuti->start)->diffInDays(Carbon::parse($cuti->end)) + 1;
+
                 $user = User::find($cuti->user_id);
             
                 // Check if the user has enough leave balance

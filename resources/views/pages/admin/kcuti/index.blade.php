@@ -8,6 +8,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <h5 class="card-title fw-semibold">Kelola Cuti</h5>
+                    <a href="/run-schedule">reset cuti</a>
                 </div>
 
                 <div class="row">
