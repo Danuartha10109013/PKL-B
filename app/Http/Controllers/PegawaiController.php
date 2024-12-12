@@ -37,6 +37,9 @@ class PegawaiController extends Controller
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // optional avatar
             'no_pegawai' => 'required|string|unique:users,no_pegawai',
             'email' => 'nullable|email|unique:users,email',
+            'gender' => 'nullable',
+            'no_wa' => 'nullable',
+            'tempat_lahir' => 'nullable',
         ]);
 
         // Insert new employee into the database
@@ -47,11 +50,18 @@ class PegawaiController extends Controller
         $user->jabatan = $request->jabatan;
         $user->no_pegawai = $request->no_pegawai;
         $user->email = $request->email;
+        $user->gender = $request->gender;
+        $user->tempat_lahir = $request->tempat_lahir;
+        $user->no_wa = $request->no_wa;
         $user->role = 1;
         $user->alamat = null;
         $user->active = 1;
-        $user->password = Hash::make('ShabatMakmur'); // Set default password
-
+        $user->password = Hash::make('ShabatMakmur');
+        if($request->gender == 'Laki-Laki'){
+            $user->profile = 'avatars/man.jpg';
+        }else{
+            $user->profile = 'avatars/woman.jpg';
+        }
         if ($request->hasFile('avatar')) {
             // Delete the old profile picture if it exists
             if ($user->profile) {

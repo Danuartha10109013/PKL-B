@@ -24,6 +24,9 @@ class ProfileController extends Controller
             'email' => 'required|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|min:6|confirmed',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gender' => 'nullable',
+            'no_wa' => 'nullable',
+            'tempat_lahir' => 'nullable',
         ]);
 
         // Find the user by ID
@@ -33,6 +36,9 @@ class ProfileController extends Controller
         $user->name = $request->name;
         $user->username = $request->username;
         $user->email = $request->email;
+        $user->gender = $request->gender;
+        $user->tempat_lahir = $request->tempat_lahir;
+        $user->no_wa = $request->no_wa;
 
         // Handle password update (if provided)
         if ($request->password) {

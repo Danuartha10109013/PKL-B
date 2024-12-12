@@ -48,6 +48,18 @@ Dashboard || Admin
                                     <label for="role" class="form-label">Role</label>
                                     <input type="text" id="role" name="role" class="form-control" value="{{ $data->role == 0 ? 'Admin' : ($data->role == 1 ? 'Pegawai' : 'cc') }}" readonly>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="no_wa" class="form-label">No WA</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="no_wa" 
+                                        name="no_wa" 
+                                        value="{{ $data->no_wa ?? '' }}"
+                                    >
+                                </div>
+                                
+                                
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -56,6 +68,25 @@ Dashboard || Admin
                                         <img src="{{ asset('storage/'.$data->profile) }}" alt="{{ $data->profile }}" class="img-fluid rounded" style="max-width: 150px; display: none;" id="avatar-preview">
                                     </div>
                                     <input type="file" id="avatar-input" name="avatar" class="form-control avatar-input" onchange="previewImage(event)">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="tempat_lahir" 
+                                        name="tempat_lahir" 
+                                        value="{{ $data->tempat_lahir ?? '' }}"
+                                    >
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <select class="form-control" id="gender" name="gender">
+                                        <option value="" disabled {{ !$data->gender ? 'selected' : '' }}>--Pilih Gender--</option>
+                                        <option value="Laki-Laki" {{ $data->gender == 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
+                                        <option value="Perempuan" {{ $data->gender == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">New Password</label>

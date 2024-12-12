@@ -77,10 +77,21 @@ All Karyawan || {{ Auth::user()->role == 0 ? 'Admin' : 'Pegawai' }}
                         <h5 class="card-title fw-bold text-primary">{{ $user->name }}</h5>
                         <p class="card-text text-secondary">
                             <strong>Jabatan:</strong> {{ $user->jabatan ?? 'N/A' }}<br>
-                            <strong>Tanggal Lahir:</strong> {{ $user->birth_date ? $user->birth_date->format('d M Y') : 'N/A' }}<br>
+                            <strong>Tempat Lahir:</strong> {{ $user->tempat_lahir ?? 'N/A' }}<br>
+                            <strong>Tanggal Lahir:</strong> 
+                            {{ $user->birthday ? \Carbon\Carbon::parse($user->birthday)->format('d M Y') : 'N/A' }}
+                            <br>
+                            <strong>Umur:</strong> 
+                            {{ $user->birthday ? \Carbon\Carbon::parse($user->birthday)->age . ' tahun' : 'N/A' }}
+                            <br>
                             <strong>Alamat:</strong> {{ $user->alamat ?? 'N/A' }}<br>
                             <strong>Email:</strong> {{ $user->email }}
                         </p>
+                        <a target="_blank" 
+                            href="https://wa.me/{{ preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $user->no_wa)) }}" 
+                            class="btn btn-success">
+                                <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                            </a>
                     </div>
                 </div>
             </div>

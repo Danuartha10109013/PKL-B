@@ -100,6 +100,37 @@ Kelola Pegawai || Admin
                                 <input type="email" class="form-control" id="email" name="email" value="{{ $d->email }}">
                             </div>
                             <div class="mb-3">
+                              <label for="no_wa" class="form-label">No WA</label>
+                              <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  id="no_wa" 
+                                  name="no_wa" 
+                                  value="{{ $d->no_wa ?? '' }}"
+                              >
+                          </div>
+                          
+                          <div class="mb-3">
+                              <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                              <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  id="tempat_lahir" 
+                                  name="tempat_lahir" 
+                                  value="{{ $d->tempat_lahir ?? '' }}"
+                              >
+                          </div>
+                          
+                          <div class="mb-3">
+                              <label for="gender" class="form-label">Gender</label>
+                              <select class="form-control" id="gender" name="gender">
+                                  <option value="" disabled {{ !$d->gender ? 'selected' : '' }}>--Pilih Gender--</option>
+                                  <option value="Laki-Laki" {{ $d->gender == 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
+                                  <option value="Perempuan" {{ $d->gender == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                              </select>
+                          </div>
+                          
+                            <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep current password">
                             </div>
@@ -173,6 +204,23 @@ Kelola Pegawai || Admin
                     <label for="username" class="form-label">Email</label>
                     <input type="email" class="form-control" id="username" name="email" >
                 </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">no_wa</label>
+                    <input type="text" class="form-control" id="username" name="no_wa" >
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">tempat_lahir</label>
+                    <input type="text" class="form-control" id="username" name="tempat_lahir" >
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Gender</label>
+                    <select type="text" class="form-control" id="username" name="gender" >
+                      <option value="" selected disabled>--Pilih Gender--</option>
+                      <option value="Laki-Laki">Laki-Laki</option>
+                      <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
+                
                 <div class="mb-3">
                     <label for="username" class="form-label"><small >Password Automaticly : <p style="color: red">ShabatMakmur</p></small></label>
                 </div>
