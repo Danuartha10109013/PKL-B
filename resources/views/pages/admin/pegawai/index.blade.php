@@ -92,8 +92,26 @@ Kelola Pegawai || Admin
                                 <input type="text" class="form-control" id="username" name="username" value="{{ $d->username }}">
                             </div>
                             <div class="mb-3">
+                              <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                              <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  id="tempat_lahir" 
+                                  name="tempat_lahir" 
+                                  value="{{ $d->tempat_lahir ?? '' }}"
+                              >
+                          </div>
+                            <div class="mb-3">
+                                <label for="birthday" class="form-label">Birthday</label>
+                                <input type="date" class="form-control" id="birthday" name="birthday" value="{{ $d->birthday }}">
+                            </div>
+                            <div class="mb-3">
                                 <label for="jabatan" class="form-label">Jabatan</label>
                                 <input type="text" class="form-control" id="jabatan" name="jabatan" value="{{ $d->jabatan }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="alamat" class="form-label">Alamat</label>
+                                <input type="text" class="form-control" id="alamat" name="alamat" value="{{ $d->alamat }}">
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
@@ -110,16 +128,7 @@ Kelola Pegawai || Admin
                               >
                           </div>
                           
-                          <div class="mb-3">
-                              <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
-                              <input 
-                                  type="text" 
-                                  class="form-control" 
-                                  id="tempat_lahir" 
-                                  name="tempat_lahir" 
-                                  value="{{ $d->tempat_lahir ?? '' }}"
-                              >
-                          </div>
+                          
                           
                           <div class="mb-3">
                               <label for="gender" class="form-label">Gender</label>

@@ -53,6 +53,7 @@ class PegawaiController extends Controller
         $user->gender = $request->gender;
         $user->tempat_lahir = $request->tempat_lahir;
         $user->no_wa = $request->no_wa;
+        $user->alamat = $request->alamat;
         $user->role = 1;
         $user->alamat = null;
         $user->active = 1;
@@ -99,6 +100,10 @@ class PegawaiController extends Controller
         $user->username = $request->username;
         $user->jabatan = $request->jabatan;
         $user->email = $request->email;
+        $user->alamat = $request->alamat;
+        $user->birthday = $request->birthday;
+        $user->tempat_lahir = $request->tempat_lahir;
+        $user->no_wa = $request->no_wa;
 
         // Handle the password update
         if ($request->filled('password')) {

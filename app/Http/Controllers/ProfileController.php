@@ -39,6 +39,8 @@ class ProfileController extends Controller
         $user->gender = $request->gender;
         $user->tempat_lahir = $request->tempat_lahir;
         $user->no_wa = $request->no_wa;
+        $user->birthday = $request->birthday;
+        $user->alamat = $request->alamat;
 
         // Handle password update (if provided)
         if ($request->password) {

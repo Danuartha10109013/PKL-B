@@ -49,7 +49,7 @@ Dashboard || Admin
                                     <input type="text" id="role" name="role" class="form-control" value="{{ $data->role == 0 ? 'Admin' : ($data->role == 1 ? 'Pegawai' : 'cc') }}" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="no_wa" class="form-label">No WA</label>
+                                    <label for="no_wa" class="form-label">No WhatsApp</label>
                                     <input 
                                         type="text" 
                                         class="form-control" 
@@ -57,6 +57,15 @@ Dashboard || Admin
                                         name="no_wa" 
                                         value="{{ $data->no_wa ?? '' }}"
                                     >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="alamat" class="form-label">Alamat</label>
+                                    <textarea 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="alamat" 
+                                        name="alamat" 
+                                    >{{ $data->alamat ?? '' }}</textarea>
                                 </div>
                                 
                                 
@@ -77,6 +86,16 @@ Dashboard || Admin
                                         id="tempat_lahir" 
                                         name="tempat_lahir" 
                                         value="{{ $data->tempat_lahir ?? '' }}"
+                                    >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="birthday" class="form-label">Birthday</label>
+                                    <input 
+                                        type="date" 
+                                        class="form-control" 
+                                        id="birthday" 
+                                        name="birthday" 
+                                        value="{{ $data->birthday ?? '' }}"
                                     >
                                 </div>
                                 
