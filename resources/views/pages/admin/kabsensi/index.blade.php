@@ -170,7 +170,7 @@
                             </td>
                             <td class="border-bottom-0">
                                 <p class="mb-0 fw-normal">
-                                    {{$t->confirmation == 1 ? 'Terverifikasi' : ($t->confirmation != 1 ? 'Belum Terverifikasi' : 'none')}}
+                                    {{$d->confirmation == 1 ? 'Terverifikasi' : ($d->confirmation != 1 ? 'Belum Terverifikasi' : 'none')}}
                                 </p>
                             </td>
                             <td class="border-bottom-0">
@@ -200,19 +200,19 @@
                                             <img src="{{ asset('/'.$d->photo) }}" alt="Bukti Absen" class="img-fluid">
                                         </div>
                                         <div class="modal-footer">
-                                            @if ($t->confirmation == 1)
+                                            @if ($d->confirmation == 1)
                                            
                                             <p>Absensi Telah dikonfirmasi</p>
                                                 {{-- Tampilkan jika sudah terverifikasi --}}
-                                            @elseif(is_null($t->confirmation) || $t->confirmation != 1)
-                                                <form action="{{ route('admin.kabsensi.konfirmasi', $t->id) }}" method="POST" id="form-verifikasi-{{$t->id}}">
+                                            @elseif(is_null($d->confirmation) || $d->confirmation != 1)
+                                                <form action="{{ route('admin.kabsensi.konfirmasi', $d->id) }}" method="POST" id="form-verifikasi-{{$d->id}}">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="form-control">
                                                         {{-- <input type="text" value="{{$t->id}}"> --}}
                                                         <div class="mb-3">
-                                                            <label for="verivikasi-{{$t->id}}">Status Verifikasi</label>
-                                                            <select name="verivikasi" id="verifikasi-select-{{$t->id}}" class="form-control" onchange="toggleOtherInput({{$t->id}})">
+                                                            <label for="verivikasi-{{$d->id}}">Status Verifikasi</label>
+                                                            <select name="verivikasi" id="verifikasi-select-{{$d->id}}" class="form-control" onchange="toggleOtherInput({{$d->id}})">
                                                                 <option value="" disabled selected>--Pilih Konfirmasi--</option>
                                                                 <option value="1">Sesuai</option>
                                                                 <option value="0">Bukan Dikantor</option>
@@ -220,8 +220,8 @@
                                                             </select>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="keterangan-{{$t->id}}">Keterangan</label>
-                                                            <input type="text" name="keterangan" id="keterangan-{{$t->id}}" class="form-control">
+                                                            <label for="keterangan-{{$d->id}}">Keterangan</label>
+                                                            <input type="text" name="keterangan" id="keterangan-{{$d->id}}" class="form-control">
                                                             <input type="text" name="verivikasi_oleh" value="{{ Auth::user()->id }}" hidden>
                                                         </div>
                                                     </div>

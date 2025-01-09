@@ -23,6 +23,7 @@ class KelolaAbsensiController extends Controller
         $telatpulang = AbsensiM::whereTime('created_at', '<', '17:00:00')->where('confirmation', null)->orderBy('created_at','desc')->where('type','pulang')->get();
 
         $terkonfirmasi = AbsensiM::orderBy('created_at','desc')->get();
+        // dd($terkonfirmasi);
 
         return view('pages.admin.kabsensi.index',compact('tepatmasuk','telatmasuk','verivikasi','tepatpulang','telatpulang','verivikasipulang','terkonfirmasi'));
     }
